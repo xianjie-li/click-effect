@@ -1,0 +1,49 @@
+.bk-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.bk-effect.__light .bk-effect-ripple{
+  background: rgba(255,255,255,0.3);
+}
+
+.bk-effect.__red .bk-effect-ripple{
+  background: rgba(245, 34, 45, 0.4);
+}
+
+.bk-effect.__orange .bk-effect-ripple{
+  background: rgba(250, 140, 22, 0.4);
+}
+
+.bk-effect.__yellow .bk-effect-ripple{
+  background: rgba(250, 219, 20, 0.4);
+}
+
+.bk-effect.__green .bk-effect-ripple{
+  background: rgba(82, 196, 26, 0.4);
+}
+
+.bk-effect.__cyan .bk-effect-ripple{
+  background: rgba(19, 194, 194, 0.4);
+}
+
+.bk-effect.__blue .bk-effect-ripple{
+  background: rgba(24, 144, 255, 0.4);
+}
+
+.bk-effect.__purple .bk-effect-ripple{
+  background: rgba(114, 46, 209, 0.4);
+}
+
+.bk-effect-ripple {
+  position: absolute;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  opacity: 1;
+  background: rgba(0,0,0,0.16);
+  transition: all 0.7s ease-out;
+  transition-property: transform, opacity;
+  transform: scale(0);
+  pointer-events: none;
+}

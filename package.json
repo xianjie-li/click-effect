@@ -1,0 +1,21 @@
+{
+  "name": "@lxjx/bk-click-effect",
+  "version": "1.0.1",
+  "description": "material ripple windows click effect",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "authors": {
+    "name": "lixianjie",
+    "email": "1073830130@qq.com"
+  },
+  "repository": "https://github.com/Iixianjie/rc-config2router",
+  "scripts": {
+    "dev": "umi-lib doc dev",
+    "build": "umi-lib build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "umi-library": "^1.1.1"
+  },
+  "license": "MIT"
+}
