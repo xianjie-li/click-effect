@@ -12,6 +12,9 @@ Md + windows Click on the simple implementation of the style. All events are del
 yarn add @lxjx/bk-click-effect
 // or 
 npm install @lxjx/bk-click-effect
+
+// browser
+src="./dist/index.umd.min.js"
 ```
 
 <br>
