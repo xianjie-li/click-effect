@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.rcConfig2Router = factory());
+  (global = global || self, global.BkEffect = factory());
 }(this, function () { 'use strict';
 
   function styleInject(css, ref) {
@@ -34,28 +34,6 @@
   var css = ".bk-effect {\n  position: relative;\n  overflow: hidden;\n}\n\n.bk-effect.__light .bk-effect-ripple{\n  background: rgba(255,255,255,0.3);\n}\n\n.bk-effect.__red .bk-effect-ripple{\n  background: rgba(245, 34, 45, 0.4);\n}\n\n.bk-effect.__orange .bk-effect-ripple{\n  background: rgba(250, 140, 22, 0.4);\n}\n\n.bk-effect.__yellow .bk-effect-ripple{\n  background: rgba(250, 219, 20, 0.4);\n}\n\n.bk-effect.__green .bk-effect-ripple{\n  background: rgba(82, 196, 26, 0.4);\n}\n\n.bk-effect.__cyan .bk-effect-ripple{\n  background: rgba(19, 194, 194, 0.4);\n}\n\n.bk-effect.__blue .bk-effect-ripple{\n  background: rgba(24, 144, 255, 0.4);\n}\n\n.bk-effect.__purple .bk-effect-ripple{\n  background: rgba(114, 46, 209, 0.4);\n}\n\n.bk-effect-ripple {\n  position: absolute;\n  border-radius: 50%;\n  width: 0;\n  height: 0;\n  opacity: 1;\n  background: rgba(0,0,0,0.16);\n  transition: all 0.7s ease-out;\n  transition-property: transform, opacity;\n  transform: scale(0);\n  pointer-events: none;\n}";
   styleInject(css);
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
-  }
-
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -71,48 +49,43 @@
     return obj;
   }
 
-  function _objectSpread(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      var ownKeys = Object.keys(source);
-
-      if (typeof Object.getOwnPropertySymbols === 'function') {
-        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-        }));
-      }
-
-      ownKeys.forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    }
-
-    return target;
-  }
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-  }
+  var defineProperty = _defineProperty;
 
   function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+        arr2[i] = arr[i];
+      }
 
       return arr2;
     }
   }
 
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
+  var arrayWithoutHoles = _arrayWithoutHoles;
 
   function _iterableToArray(iter) {
     if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
   }
+
+  var iterableToArray = _iterableToArray;
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
+  var nonIterableSpread = _nonIterableSpread;
+
+  function _toConsumableArray(arr) {
+    return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
+  }
+
+  var toConsumableArray = _toConsumableArray;
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  var arrayWithHoles = _arrayWithHoles;
 
   function _iterableToArrayLimit(arr, i) {
     var _arr = [];
@@ -140,17 +113,53 @@
     return _arr;
   }
 
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
-  }
+  var iterableToArrayLimit = _iterableToArrayLimit;
 
   function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
+  var nonIterableRest = _nonIterableRest;
+
+  function _slicedToArray(arr, i) {
+    return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
+  }
+
+  var slicedToArray = _slicedToArray;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var classCallCheck = _classCallCheck;
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  var createClass = _createClass;
+
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
   /**
    * @description 
-   *    md + windows 点击风格的简陋实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
+   *    md + windows 点击风格的简单实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
    *    Md + windows Click on the simple implementation of the style. All events are delegated to the document, supporting dynamically created elements, and can be used with the mvvm library at will. Compatible with mobile phones and PCs.
    * @author lxj
    * @date 2019-07-28
@@ -171,7 +180,7 @@
 
       var option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      _classCallCheck(this, BkEffect);
+      classCallCheck(this, BkEffect);
 
       this.triggerEl = null;
       this.supportTouch = 'ontouchstart' in window;
@@ -238,13 +247,13 @@
 
         if (inArea) {
           var _this$getOffestPos = _this.getOffestPos(mouseEvt, bound),
-              _this$getOffestPos2 = _slicedToArray(_this$getOffestPos, 2),
+              _this$getOffestPos2 = slicedToArray(_this$getOffestPos, 2),
               offsetX = _this$getOffestPos2[0],
               offsetY = _this$getOffestPos2[1];
 
           var rotateData = _this.getRotateRatio(bound.width, bound.height, offsetX, offsetY);
 
-          _this.setRotate.apply(_this, _toConsumableArray(rotateData));
+          _this.setRotate.apply(_this, toConsumableArray(rotateData));
         }
       };
 
@@ -261,11 +270,11 @@
         return;
       }
       BkEffect.loaded = true;
-      this.option = _objectSpread({}, defaultconfig, option);
+      this.option = _objectSpread({}, defaultconfig, {}, option);
       this.init();
     }
 
-    _createClass(BkEffect, [{
+    createClass(BkEffect, [{
       key: "init",
       value: function init() {
         this.bindUpEvent();
@@ -283,7 +292,7 @@
         var ripple = document.createElement('div');
 
         var _this$getOffestPos3 = this.getOffestPos(mouseEvt, bound),
-            _this$getOffestPos4 = _slicedToArray(_this$getOffestPos3, 2),
+            _this$getOffestPos4 = slicedToArray(_this$getOffestPos3, 2),
             left = _this$getOffestPos4[0],
             top = _this$getOffestPos4[1];
 
