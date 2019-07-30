@@ -21,7 +21,7 @@ src="./dist/index.umd.min.js"
 
 ## demo
 
-[![Edit thirsty-bhabha-td3tu](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/thirsty-bhabha-td3tu?fontsize=14)
+[![Edit bk-click-effect](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/bk-click-effect-9ris7?fontsize=14)
 
 <br>
 
