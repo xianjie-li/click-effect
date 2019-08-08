@@ -22,7 +22,6 @@ export default class BkEffect {
 
   constructor(option = {}) {
     if (BkEffect.loaded) {
-      console.warn('BkEffect: Do not create instances repeatedly！');
       return;
     };
     BkEffect.loaded = true;
@@ -264,7 +263,6 @@ export default class BkEffect {
   }
 
   isEffectEl(el) {
-    console.log(el);
     return el.className.indexOf(this.option.effect) !== -1;
   }
   

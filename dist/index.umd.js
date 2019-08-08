@@ -268,7 +268,6 @@
       };
 
       if (BkEffect.loaded) {
-        console.warn('BkEffect: Do not create instances repeatedly！');
         return;
       }
       BkEffect.loaded = true;
@@ -457,7 +456,6 @@
     }, {
       key: "isEffectEl",
       value: function isEffectEl(el) {
-        console.log(el);
         return el.className.indexOf(this.option.effect) !== -1;
       }
     }, {
