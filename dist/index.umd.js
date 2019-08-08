@@ -31,7 +31,7 @@
     }
   }
 
-  var css = ".bk-effect {\n  position: relative;\n  overflow: hidden;\n}\n\n.bk-effect.__light .bk-effect-ripple{\n  background: rgba(255,255,255,0.3);\n}\n\n.bk-effect.__red .bk-effect-ripple{\n  background: rgba(245, 34, 45, 0.4);\n}\n\n.bk-effect.__orange .bk-effect-ripple{\n  background: rgba(250, 140, 22, 0.4);\n}\n\n.bk-effect.__yellow .bk-effect-ripple{\n  background: rgba(250, 219, 20, 0.4);\n}\n\n.bk-effect.__green .bk-effect-ripple{\n  background: rgba(82, 196, 26, 0.4);\n}\n\n.bk-effect.__cyan .bk-effect-ripple{\n  background: rgba(19, 194, 194, 0.4);\n}\n\n.bk-effect.__blue .bk-effect-ripple{\n  background: rgba(24, 144, 255, 0.4);\n}\n\n.bk-effect.__purple .bk-effect-ripple{\n  background: rgba(114, 46, 209, 0.4);\n}\n\n.bk-effect-ripple {\n  position: absolute;\n  border-radius: 50%;\n  width: 0;\n  height: 0;\n  opacity: 1;\n  background: rgba(0,0,0,0.16);\n  transition: all 0.7s ease-out;\n  transition-property: transform, opacity;\n  transform: scale(0);\n  pointer-events: none;\n}";
+  var css = ".bk-effect {\r\n  position: relative;\r\n  overflow: hidden;\r\n}\r\n\r\n.bk-effect.__light .bk-effect-ripple{\r\n  background: rgba(255,255,255,0.3);\r\n}\r\n\r\n.bk-effect.__red .bk-effect-ripple{\r\n  background: rgba(245, 34, 45, 0.4);\r\n}\r\n\r\n.bk-effect.__orange .bk-effect-ripple{\r\n  background: rgba(250, 140, 22, 0.4);\r\n}\r\n\r\n.bk-effect.__yellow .bk-effect-ripple{\r\n  background: rgba(250, 219, 20, 0.4);\r\n}\r\n\r\n.bk-effect.__green .bk-effect-ripple{\r\n  background: rgba(82, 196, 26, 0.4);\r\n}\r\n\r\n.bk-effect.__cyan .bk-effect-ripple{\r\n  background: rgba(19, 194, 194, 0.4);\r\n}\r\n\r\n.bk-effect.__blue .bk-effect-ripple{\r\n  background: rgba(24, 144, 255, 0.4);\r\n}\r\n\r\n.bk-effect.__purple .bk-effect-ripple{\r\n  background: rgba(114, 46, 209, 0.4);\r\n}\r\n\r\n.bk-effect-ripple {\r\n  position: absolute;\r\n  border-radius: 50%;\r\n  width: 0;\r\n  height: 0;\r\n  opacity: 1;\r\n  background: rgba(0,0,0,0.16);\r\n  transition: all 0.7s ease-out;\r\n  transition-property: transform, opacity;\r\n  transform: scale(0);\r\n  pointer-events: none;\r\n}";
   styleInject(css);
 
   function _defineProperty(obj, key, value) {
@@ -450,7 +450,7 @@
     }, {
       key: "getCrrentEl",
       value: function getCrrentEl(e) {
-        return e.target || e.srcElement;
+        return this.getWavesEffectElement(e);
       }
     }, {
       key: "isEffectEl",
@@ -471,6 +471,29 @@
       key: "isDisabled",
       value: function isDisabled(el) {
         return new RegExp(this.option.disabled + '(\\s|)$').test(el.className);
+      }
+      /**
+       * Reference to: https://github.com/fians/Waves
+       * Delegated click handler for .waves-effect element.
+       * returns null when .waves-effect element not in "click tree"
+       */
+
+    }, {
+      key: "getWavesEffectElement",
+      value: function getWavesEffectElement(e) {
+        var element = null;
+        var target = e.target || e.srcElement;
+
+        while (target.parentNode !== null) {
+          if (!(target instanceof SVGElement) && target.className.indexOf(this.option.effect) !== -1) {
+            element = target;
+            break;
+          }
+
+          target = target.parentNode;
+        }
+
+        return element;
       }
     }]);
 

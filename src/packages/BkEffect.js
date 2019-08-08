@@ -259,7 +259,7 @@ export default class BkEffect {
   }
 
   getCrrentEl(e) {
-    return e.target || e.srcElement;
+    return this.getWavesEffectElement(e);
   }
 
   isEffectEl(el) {
@@ -276,6 +276,29 @@ export default class BkEffect {
 
   isDisabled(el) {
     return new RegExp(this.option.disabled + '(\\s|)$').test(el.className);
+  }
+
+  /**
+   * Reference to: https://github.com/fians/Waves
+   * Delegated click handler for .waves-effect element.
+   * returns null when .waves-effect element not in "click tree"
+   */
+  getWavesEffectElement(e) {
+
+    var element = null;
+    var target = e.target || e.srcElement;
+
+    while (target.parentNode !== null) {
+      if (
+        !(target instanceof SVGElement) &&
+        target.className.indexOf(this.option.effect) !== -1
+      ) {
+        element = target;
+        break;
+      }
+      target = target.parentNode;
+    }
+    return element;
   }
 }
 
