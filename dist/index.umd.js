@@ -189,6 +189,8 @@
       this.onDown = function (e) {
         var target = _this.getCrrentEl(e);
 
+        if (!target) return;
+
         var isEffectEl = _this.isEffectEl(target);
 
         var isDisabledWinStyle = _this.isDisabledWinStyle(target);
@@ -455,6 +457,7 @@
     }, {
       key: "isEffectEl",
       value: function isEffectEl(el) {
+        console.log(el);
         return el.className.indexOf(this.option.effect) !== -1;
       }
     }, {

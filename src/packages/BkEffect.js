@@ -43,6 +43,7 @@ export default class BkEffect {
   /* mousedown */
   onDown = e => {
     let target = this.getCrrentEl(e);
+    if(!target) return;
     let isEffectEl = this.isEffectEl(target);
     let isDisabledWinStyle = this.isDisabledWinStyle(target);
     let isDisabledMdStyle = this.isDisabledMdStyle(target);
@@ -263,6 +264,7 @@ export default class BkEffect {
   }
 
   isEffectEl(el) {
+    console.log(el);
     return el.className.indexOf(this.option.effect) !== -1;
   }
   
