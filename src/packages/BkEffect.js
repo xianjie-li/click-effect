@@ -131,7 +131,7 @@ export default class BkEffect {
 
   /*  mouse press and move the mouse inside the element */
   onMove = (e, isManual) => {
-    if (e.cancelable && !isManual) e.preventDefault();
+    // if (e.cancelable && !isManual) e.preventDefault();
 
     // throttling
     if (this.stopFlag) return;
