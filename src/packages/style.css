@@ -42,8 +42,8 @@
   height: 0;
   opacity: 1;
   background: rgba(0,0,0,0.16);
-  transition: all 0.7s ease-out;
+  transition: 0.7s ease-out;
   transition-property: transform, opacity;
-  transform: scale(0);
+  transform: scale(0.1);
   pointer-events: none;
 }
