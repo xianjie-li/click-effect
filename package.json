@@ -8,7 +8,7 @@
     "name": "lixianjie",
     "email": "1073830130@qq.com"
   },
-  "repository": "",
+  "repository": "https://github.com/lxjxzz/bk-click-effect.git",
   "scripts": {
     "dev": "father doc dev",
     "build:doc": "father doc build",
