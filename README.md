@@ -9,9 +9,9 @@ Md + windows Click on the simple implementation of the style. All events are del
 ## Install
 
 ```
-yarn add @lxjx/bk-click-effect
+yarn add @lxjx/fr-click-effect
 // or 
-npm install @lxjx/bk-click-effect
+npm install @lxjx/fr-click-effect
 
 // browser
 src="./dist/index.umd.min.js"
@@ -40,24 +40,26 @@ new ClickEffect({
 });
 
 // tpl
-<div className="box fr-effect">base</div>
-<div className="box fr-effect">
-has block
-<div className="block" />
+<div>
+  <div className="box fr-effect">base</div>
+  <div className="box fr-effect">
+    has block
+    <div className="block" />
+  </div>
+  <div style={{ backgroundColor: '#000' }} className="box fr-effect __light">
+    white
+  </div>
+  <div className="box fr-effect __win">only win style</div>
+  <div className="box fr-effect __md ">only md style</div>
+  <div className="box fr-effect __disabled">disabled</div>
+  <div className="box fr-effect __red">red</div>
+  <div className="box fr-effect __orange">orange</div>
+  <div className="box fr-effect __yellow">yellow</div>
+  <div className="box fr-effect __green">green</div>
+  <div className="box fr-effect __cyan">cyan</div>
+  <div className="box __w2 fr-effect __blue">blue</div>
+  <div className="box __w2 fr-effect __purple">purple</div>
 </div>
-<div style={{ backgroundColor: '#000' }} className="box fr-effect __light">
-white
-</div>
-<div className="box fr-effect __win">only win style</div>
-<div className="box fr-effect __md ">only md style</div>
-<div className="box fr-effect __disabled">disabled</div>
-<div className="box fr-effect __red">red</div>
-<div className="box fr-effect __orange">orange</div>
-<div className="box fr-effect __yellow">yellow</div>
-<div className="box fr-effect __green">green</div>
-<div className="box fr-effect __cyan">cyan</div>
-<div className="box __w2 fr-effect __blue">blue</div>
-<div className="box __w2 fr-effect __purple">purple</div>
 
 // add theme
 .fr-effect.__red .fr-effect-ripple{
