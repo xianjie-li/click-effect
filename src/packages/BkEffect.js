@@ -1,33 +1,30 @@
 /**
- * @description 
- *    md + windows 点击风格的简单实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
- *    Md + windows Click on the simple implementation of the style. All events are delegated to the document, supporting dynamically created elements, and can be used with the mvvm library at will. Compatible with mobile phones and PCs.
- * @author lxj
- * @date 2019-07-28
- * @class BkEffect
+ *  md + windows 点击风格的简单实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
+ *  Md + windows Click on the simple implementation of the style. All events are delegated to the document, supporting dynamically created elements, and can be used with the mvvm library at will. Compatible with mobile phones and PCs.
  */
 
-const defaultconfig = {
-  effect: 'bk-effect',
+let loaded = false;
+
+const defaultConfig = {
+  effect: 'fr-effect',
   disabled: '__disabled',
-  disabledwinStyle: '__disabledWinStyle',
-  disabledMdStyle: '__disabledMdStyle',
-}
+  disabledWinStyle: '__md',
+  disabledMdStyle: '__win',
+};
 
 export default class BkEffect {
-  triggerEl = null;
-  supportTouch = 'ontouchstart' in window;
-  ripple = null;
-  static loaded = false;
+  supportTouch = ('ontouchstart' in window);
+  triggerEl = []; // 触发点击的元素列表
+  ripple = []; // 所有波动元素的列表
 
   constructor(option = {}) {
-    if (BkEffect.loaded) {
+    if (loaded) {
       return;
-    };
-    BkEffect.loaded = true;
+    }
+    loaded = true;
 
     this.option = {
-      ...defaultconfig,
+      ...defaultConfig,
       ...option,
     };
 
@@ -41,76 +38,80 @@ export default class BkEffect {
 
   /* mousedown */
   onDown = e => {
-    let target = this.getCrrentEl(e);
-    if(!target) return;
+    let target = this.getCurrentEl(e);
+    if (!target) return;
     let isEffectEl = this.isEffectEl(target);
     let isDisabledWinStyle = this.isDisabledWinStyle(target);
     let isDisabledMdStyle = this.isDisabledMdStyle(target);
     let isDisabled = this.isDisabled(target);
-    if (isEffectEl) {
-      if(isDisabled) return;
+    if (!isDisabled && isEffectEl) {
 
-      this.triggerEl = target;
+      this.triggerEl.push(target);
 
-      if(!isDisabledWinStyle) {
+      if (!isDisabledWinStyle) {
         this.onMove(e, true);
         this.bindMoveEvent();
       }
 
-      if(!isDisabledMdStyle) {
-        this.ripple = this.displayRipple(target, e);
+      if (!isDisabledMdStyle) {
+        this.ripple.push(this.displayRipple(target, e));
       }
     }
   };
 
+  /**
+   *  在根据事件对象在指定元素内生成wave
+   *  @param el { Node } - 要生成内wave的元素
+   *  @param e { TouchEvent | MouseEvent } - 当前触发的事件对象
+   *  */
   displayRipple(el, e) {
     let mouseEvt = this.supportTouch ? e.changedTouches[0] : e;
     let bound = el.getBoundingClientRect();
 
     let ripple = document.createElement('div');
     let [left, top] = this.getOffestPos(mouseEvt, bound);
-    let scalew = bound.width * 1.8;
-    let scaleh = bound.height * 1.8;
-    let max = Math.max(scalew, scaleh);
+    let scaleW = bound.width * 1.8;
+    let scaleH = bound.height * 1.8;
+    let max = Math.max(scaleW, scaleH);
 
-    ripple.className = 'bk-effect-ripple';
+    ripple.className = `${this.option.effect}-ripple`;
     ripple.style.left = `${left - max / 2}px`;
     ripple.style.top = `${top - max / 2}px`;
     ripple.style.height = `${max}px`;
     ripple.style.width = `${max}px`;
 
-    ripple.setAttribute('data-hold', 1);
+    ripple.setAttribute('data-hold', '1');
 
     el.appendChild(ripple);
 
     // animation
     setTimeout(() => {
+      // 设置为结束状态
       ripple.style.transform = `scale3d(${1}, ${1}, 1)`;
-      ripple.style.opacity = 0;
-      this.romoveRipple(ripple);
+      ripple.style.opacity = '0';
+      this.removeRipple(ripple);
     });
 
-    // used to save elements
+    // 用于保存到ripple列表
     return ripple;
   }
 
-  romoveRipple(ripple) {
+  /* 移除传入的ripple */
+  removeRipple(ripple) {
     let isHold = +ripple.getAttribute('data-hold');
 
     if (isHold === 1) {
       ripple.style.opacity = 1;
       setTimeout(() => {
-        this.romoveRipple(ripple);
+        this.removeRipple(ripple);
       }, 700);
-      return;
-
     } else {
-
-      // not hold, delay 300ms to remove
+      // 非按住状态300ms后隐藏
       setTimeout(() => {
         ripple.style.opacity = 0;
         ripple.style.transition = 'all 0.3s ease-out';
 
+        // 300ms后彻底移除
         setTimeout(() => {
           if (!ripple.parentNode) return;
           ripple.parentNode.removeChild(ripple);
@@ -122,14 +123,15 @@ export default class BkEffect {
   /* mouseup */
   onUp = () => {
     this.unbindMoveEvent();
-    if (this.ripple) {
-      this.ripple.setAttribute('data-hold', 2);
-      this.romoveRipple(this.ripple);
-      this.ripple = null;
-    }
+
+    this.ripple.forEach((rippleItem, index) => {
+      rippleItem.setAttribute('data-hold', 2);
+      this.removeRipple(rippleItem);
+      this.ripple.splice(index, 1);
+    });
   };
 
-  /*  mouse press and move the mouse inside the element */
+  /*  鼠标按下并在元素内部移动 */
   onMove = (e, isManual) => {
     // if (e.cancelable && !isManual) e.preventDefault();
 
@@ -139,10 +141,10 @@ export default class BkEffect {
     setTimeout(() => {
       this.stopFlag = false;
     }, 100);
-
+    let currentEl = this.triggerEl[this.triggerEl.length - 1];
     // assure .clientX、e.clientY exits
     let mouseEvt = this.supportTouch ? e.changedTouches[0] : e;
-    let bound = this.triggerEl.getBoundingClientRect();
+    let bound = currentEl.getBoundingClientRect();
 
     let inArea = this.inArea(mouseEvt, bound);
 
@@ -159,29 +161,23 @@ export default class BkEffect {
         offsetX,
         offsetY
       );
-      this.setRotate(...rotateData);
+      this.setRotate(...rotateData, currentEl);
     }
   };
 
   /* 鼠标相对于目标元素的xy坐标 | The xy coordinate of the mouse relative to the target element */
   getOffestPos(mouseEvt, bound) {
-    let offsetx = mouseEvt.clientX - bound.x;
-    let offsety = mouseEvt.clientY - bound.y;
-    return [offsetx, offsety];
+    let offsetX = mouseEvt.clientX - bound.x;
+    let offsetY = mouseEvt.clientY - bound.y;
+    return [offsetX, offsetY];
   }
 
   /* 鼠标是否还在触发事件的元素内 | Whether the mouse is still inside the element that triggered the event */
   inArea = (mouseEvt, bound) => {
-    if (
-      mouseEvt.clientX < bound.x ||
+    return !(mouseEvt.clientX < bound.x ||
       mouseEvt.clientY < bound.y ||
       mouseEvt.clientX > bound.x + bound.width ||
-      mouseEvt.clientY > bound.y + bound.height
-    ) {
-      return false;
-    } else {
-      return true;
-    }
+      mouseEvt.clientY > bound.y + bound.height);
   };
 
   /* 获取元素倾斜的所需的数据 | Get the required data for the element tilt */
@@ -204,23 +200,27 @@ export default class BkEffect {
   }
 
   /* 设置元素倾斜状态 | Set the element tilt state */
-  setRotate(x, y, center) {
-    this.triggerEl.style.transition = '70ms ease-in-out';
-    this.triggerEl.style.transformOrigin = '50% 50%';
-    this.triggerEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, 16deg) scale3d(${center}, ${center}, 1)`;
+  setRotate(x, y, center, currentEl) {
+    currentEl.style.transition = '70ms ease-in-out';
+    currentEl.style.transformOrigin = '50% 50%';
+    currentEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, 8deg) scale3d(${center}, ${center}, 1)`;
+    currentEl.style.userSelect = 'none';
   }
 
   /* 移除元素倾斜状态 | Remove element tilt state */
   removeRotate() {
     if (!this.triggerEl) return;
-    this.triggerEl.style.transformOrigin = '';
-    this.triggerEl.style.transform = '';
-    setTimeout(() => {
-      this.triggerEl.style.transition = '';
-    }, 70);
+    this.triggerEl.forEach(elItem => {
+      elItem.style.transformOrigin = '';
+      elItem.style.transform = '';
+      elItem.style.userSelect = '';
+      setTimeout(() => {
+        elItem.style.transition = '';
+      }, 70);
+    });
   }
 
-  /* ======= eventBinder/ utils ↓ ====== */
+  /* ======= eventBinder / utils ====== */
 
   bindUpEvent() {
     if (this.supportTouch) {
@@ -258,16 +258,16 @@ export default class BkEffect {
     }
   }
 
-  getCrrentEl(e) {
+  getCurrentEl(e) {
     return this.getWavesEffectElement(e);
   }
 
   isEffectEl(el) {
     return el.className.indexOf(this.option.effect) !== -1;
   }
-  
+
   isDisabledWinStyle(el) {
-    return el.className.indexOf(this.option.disabledwinStyle) !== -1;
+    return el.className.indexOf(this.option.disabledWinStyle) !== -1;
   }
 
   isDisabledMdStyle(el) {
@@ -285,8 +285,8 @@ export default class BkEffect {
    */
   getWavesEffectElement(e) {
 
-    var element = null;
-    var target = e.target || e.srcElement;
+    let element = null;
+    let target = e.target || e.srcElement;
 
     while (target.parentNode !== null) {
       if (

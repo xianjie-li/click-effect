@@ -4,6 +4,7 @@
   "description": "material ripple windows click effect",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
+  "types": "./index.d.ts",
   "authors": {
     "name": "lixianjie",
     "email": "1073830130@qq.com"
@@ -18,7 +19,7 @@
     "@babel/runtime": "^7.5.5"
   },
   "devDependencies": {
-    "father": "^2.14.0"
+    "father": "^2.29.2"
   },
   "license": "MIT"
 }
