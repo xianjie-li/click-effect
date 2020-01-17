@@ -1,10 +1,10 @@
 import React from 'react';
 
-import BkEffect from "../packages/BkEffect";
+import ClickEffect from "../packages/ClickEffect";
 
-new BkEffect();
-new BkEffect();
-new BkEffect();
+new ClickEffect();
+new ClickEffect();
+new ClickEffect();
 
 import './index.css';
 

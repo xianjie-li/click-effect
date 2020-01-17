@@ -13,7 +13,7 @@ const defaultConfig = {
   disabledMdStyle: '__win',
 };
 
-export default class BkEffect {
+export default class ClickEffect {
   supportTouch = ('ontouchstart' in window);
   triggerEl = []; // 触发点击的元素列表
   ripple = []; // 所有波动元素的列表

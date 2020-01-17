@@ -2,37 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.BkEffect = factory());
-}(this, function () { 'use strict';
-
-  function styleInject(css, ref) {
-    if ( ref === void 0 ) ref = {};
-    var insertAt = ref.insertAt;
-
-    if (!css || typeof document === 'undefined') { return; }
-
-    var head = document.head || document.getElementsByTagName('head')[0];
-    var style = document.createElement('style');
-    style.type = 'text/css';
-
-    if (insertAt === 'top') {
-      if (head.firstChild) {
-        head.insertBefore(style, head.firstChild);
-      } else {
-        head.appendChild(style);
-      }
-    } else {
-      head.appendChild(style);
-    }
-
-    if (style.styleSheet) {
-      style.styleSheet.cssText = css;
-    } else {
-      style.appendChild(document.createTextNode(css));
-    }
-  }
-
-  var css = ".bk-effect {\n  position: relative;\n  overflow: hidden;\n}\n\n.bk-effect.__light .bk-effect-ripple{\n  background: rgba(255,255,255,0.3);\n}\n\n.bk-effect.__red .bk-effect-ripple{\n  background: rgba(245, 34, 45, 0.4);\n}\n\n.bk-effect.__orange .bk-effect-ripple{\n  background: rgba(250, 140, 22, 0.4);\n}\n\n.bk-effect.__yellow .bk-effect-ripple{\n  background: rgba(250, 219, 20, 0.4);\n}\n\n.bk-effect.__green .bk-effect-ripple{\n  background: rgba(82, 196, 26, 0.4);\n}\n\n.bk-effect.__cyan .bk-effect-ripple{\n  background: rgba(19, 194, 194, 0.4);\n}\n\n.bk-effect.__blue .bk-effect-ripple{\n  background: rgba(24, 144, 255, 0.4);\n}\n\n.bk-effect.__purple .bk-effect-ripple{\n  background: rgba(114, 46, 209, 0.4);\n}\n\n.bk-effect-ripple {\n  position: absolute;\n  border-radius: 50%;\n  width: 0;\n  height: 0;\n  opacity: 1;\n  background: rgba(0,0,0,0.16);\n  transition: 0.7s ease-out;\n  transition-property: transform, opacity;\n  transform: scale3d(0.1, 0.1, 1);\n  pointer-events: none;\n}";
-  styleInject(css);
+}(this, (function () { 'use strict';
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -153,41 +123,40 @@
 
   var createClass = _createClass;
 
+  var style = function style(base) {
+    /* language=css */
+    return "\n    .".concat(base, " {\n      position: relative;\n      overflow: hidden;\n    }\n    \n    .").concat(base, ".__light .").concat(base, "-ripple{\n      background: rgba(255,255,255, 0.3);\n    }\n    \n    .").concat(base, ".__red .").concat(base, "-ripple{\n      background: rgba(245, 34, 45, 0.3);\n    }\n    \n    .").concat(base, ".__orange .").concat(base, "-ripple{\n      background: rgba(250, 140, 22, 0.3);\n    }\n    \n    .").concat(base, ".__yellow .").concat(base, "-ripple{\n      background: rgba(250, 219, 20, 0.3);\n    }\n    \n    .").concat(base, ".__green .").concat(base, "-ripple{\n      background: rgba(82, 196, 26, 0.3);\n    }\n    \n    .").concat(base, ".__cyan .").concat(base, "-ripple{\n      background: rgba(19, 194, 194, 0.3);\n    }\n    \n    .").concat(base, ".__blue .").concat(base, "-ripple{\n      background: rgba(24, 144, 255, 0.3);\n    }\n    \n    .").concat(base, ".__purple .").concat(base, "-ripple{\n      background: rgba(114, 46, 209, 0.3);\n    }\n    \n    .").concat(base, "-ripple {\n      position: absolute;\n      border-radius: 50%;\n      width: 0;\n      height: 0;\n      opacity: 1;\n      background: rgba(0,0,0,0.14);\n      transition: 0.6s ease-out;\n      transition-property: transform, opacity;\n      transform: scale3d(0, 0, 1);\n      pointer-events: none;\n    }\n  ");
+  };
+
   function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
   function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  /**
-   * @description 
-   *    md + windows 点击风格的简单实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
-   *    Md + windows Click on the simple implementation of the style. All events are delegated to the document, supporting dynamically created elements, and can be used with the mvvm library at will. Compatible with mobile phones and PCs.
-   * @author lxj
-   * @date 2019-07-28
-   * @class BkEffect
-   */
-  var defaultconfig = {
-    effect: 'bk-effect',
+  var loaded = false;
+  var defaultConfig = {
+    effect: 'fr-effect',
     disabled: '__disabled',
-    disabledwinStyle: '__disabledWinStyle',
-    disabledMdStyle: '__disabledMdStyle'
+    disabledWinStyle: '__md',
+    disabledMdStyle: '__win'
   };
 
-  var BkEffect =
+  var ClickEffect =
   /*#__PURE__*/
   function () {
-    function BkEffect() {
+    // 触发点击的元素列表
+    // 所有波动元素的列表
+    function ClickEffect() {
       var _this = this;
 
       var option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      classCallCheck(this, BkEffect);
+      classCallCheck(this, ClickEffect);
 
-      this.triggerEl = null;
       this.supportTouch = 'ontouchstart' in window;
-      this.ripple = null;
+      this.triggerEl = [];
+      this.ripple = [];
 
       this.onDown = function (e) {
-        var target = _this.getCrrentEl(e);
+        var target = _this.getCurrentEl(e);
 
         if (!target) return;
 
@@ -199,9 +168,8 @@
 
         var isDisabled = _this.isDisabled(target);
 
-        if (isEffectEl) {
-          if (isDisabled) return;
-          _this.triggerEl = target;
+        if (!isDisabled && isEffectEl) {
+          _this.triggerEl.push(target);
 
           if (!isDisabledWinStyle) {
             _this.onMove(e, true);
@@ -210,7 +178,7 @@
           }
 
           if (!isDisabledMdStyle) {
-            _this.ripple = _this.displayRipple(target, e);
+            _this.ripple.push(_this.displayRipple(target, e));
           }
         }
       };
@@ -218,13 +186,13 @@
       this.onUp = function () {
         _this.unbindMoveEvent();
 
-        if (_this.ripple) {
-          _this.ripple.setAttribute('data-hold', 2);
+        _this.ripple.forEach(function (rippleItem, index) {
+          rippleItem.setAttribute('data-hold', 2);
 
-          _this.romoveRipple(_this.ripple);
+          _this.removeRipple(rippleItem);
 
-          _this.ripple = null;
-        }
+          _this.ripple.splice(index, 1);
+        });
       };
 
       this.onMove = function (e, isManual) {
@@ -234,11 +202,11 @@
         _this.stopFlag = true;
         setTimeout(function () {
           _this.stopFlag = false;
-        }, 100); // assure .clientX、e.clientY exits
+        }, 100);
+        var currentEl = _this.triggerEl[_this.triggerEl.length - 1]; // assure .clientX、e.clientY exits
 
         var mouseEvt = _this.supportTouch ? e.changedTouches[0] : e;
-
-        var bound = _this.triggerEl.getBoundingClientRect();
+        var bound = currentEl.getBoundingClientRect();
 
         var inArea = _this.inArea(mouseEvt, bound); // out target element
 
@@ -255,36 +223,40 @@
 
           var rotateData = _this.getRotateRatio(bound.width, bound.height, offsetX, offsetY);
 
-          _this.setRotate.apply(_this, toConsumableArray(rotateData));
+          _this.setRotate.apply(_this, toConsumableArray(rotateData).concat([currentEl]));
         }
       };
 
       this.inArea = function (mouseEvt, bound) {
-        if (mouseEvt.clientX < bound.x || mouseEvt.clientY < bound.y || mouseEvt.clientX > bound.x + bound.width || mouseEvt.clientY > bound.y + bound.height) {
-          return false;
-        } else {
-          return true;
-        }
+        return !(mouseEvt.clientX < bound.x || mouseEvt.clientY < bound.y || mouseEvt.clientX > bound.x + bound.width || mouseEvt.clientY > bound.y + bound.height);
       };
 
-      if (BkEffect.loaded) {
+      if (loaded) {
         return;
       }
-      BkEffect.loaded = true;
-      this.option = _objectSpread({}, defaultconfig, {}, option);
+
+      loaded = true;
+      this.option = _objectSpread({}, defaultConfig, {}, option);
       this.init();
     }
 
-    createClass(BkEffect, [{
+    createClass(ClickEffect, [{
       key: "init",
       value: function init() {
         this.bindUpEvent();
         this.bindDownEvent();
+        this.injectStyle(style(this.option.effect));
       }
       /* mousedown */
 
     }, {
       key: "displayRipple",
+
+      /**
+       *  在根据事件对象在指定元素内生成wave
+       *  @param el { Node } - 要生成内wave的元素
+       *  @param e { TouchEvent | MouseEvent } - 当前触发的事件对象
+       *  */
       value: function displayRipple(el, e) {
         var _this2 = this;
 
@@ -297,29 +269,32 @@
             left = _this$getOffestPos4[0],
             top = _this$getOffestPos4[1];
 
-        var scalew = bound.width * 1.8;
-        var scaleh = bound.height * 1.8;
-        var max = Math.max(scalew, scaleh);
-        ripple.className = 'bk-effect-ripple';
+        var scaleW = bound.width * 1.8;
+        var scaleH = bound.height * 1.8;
+        var max = Math.max(scaleW, scaleH);
+        ripple.className = "".concat(this.option.effect, "-ripple");
         ripple.style.left = "".concat(left - max / 2, "px");
         ripple.style.top = "".concat(top - max / 2, "px");
         ripple.style.height = "".concat(max, "px");
         ripple.style.width = "".concat(max, "px");
-        ripple.setAttribute('data-hold', 1);
+        ripple.setAttribute('data-hold', '1');
         el.appendChild(ripple); // animation
 
         setTimeout(function () {
+          // 设置为结束状态
           ripple.style.transform = "scale3d(".concat(1, ", ", 1, ", 1)");
-          ripple.style.opacity = 0;
+          ripple.style.opacity = '0';
 
-          _this2.romoveRipple(ripple);
-        }); // used to save elements
+          _this2.removeRipple(ripple);
+        }); // 用于保存到ripple列表
 
         return ripple;
       }
+      /* 移除传入的ripple */
+
     }, {
-      key: "romoveRipple",
-      value: function romoveRipple(ripple) {
+      key: "removeRipple",
+      value: function removeRipple(ripple) {
         var _this3 = this;
 
         var isHold = +ripple.getAttribute('data-hold');
@@ -327,14 +302,14 @@
         if (isHold === 1) {
           ripple.style.opacity = 1;
           setTimeout(function () {
-            _this3.romoveRipple(ripple);
+            _this3.removeRipple(ripple);
           }, 700);
-          return;
         } else {
-          // not hold, delay 300ms to remove
+          // 非按住状态300ms后隐藏
           setTimeout(function () {
             ripple.style.opacity = 0;
-            ripple.style.transition = 'all 0.3s ease-out';
+            ripple.style.transition = 'all 0.3s ease-out'; // 300ms后彻底移除
+
             setTimeout(function () {
               if (!ripple.parentNode) return;
               ripple.parentNode.removeChild(ripple);
@@ -349,9 +324,9 @@
 
       /* 鼠标相对于目标元素的xy坐标 | The xy coordinate of the mouse relative to the target element */
       value: function getOffestPos(mouseEvt, bound) {
-        var offsetx = mouseEvt.clientX - bound.x;
-        var offsety = mouseEvt.clientY - bound.y;
-        return [offsetx, offsety];
+        var offsetX = mouseEvt.clientX - bound.x;
+        var offsetY = mouseEvt.clientY - bound.y;
+        return [offsetX, offsetY];
       }
       /* 鼠标是否还在触发事件的元素内 | Whether the mouse is still inside the element that triggered the event */
 
@@ -384,26 +359,28 @@
 
     }, {
       key: "setRotate",
-      value: function setRotate(x, y, center) {
-        this.triggerEl.style.transition = '70ms ease-in-out';
-        this.triggerEl.style.transformOrigin = '50% 50%';
-        this.triggerEl.style.transform = "perspective(400px) rotate3d(".concat(y, ", ").concat(x, ", 0, 16deg) scale3d(").concat(center, ", ").concat(center, ", 1)");
+      value: function setRotate(x, y, center, currentEl) {
+        currentEl.style.transition = '70ms ease-in-out';
+        currentEl.style.transformOrigin = '50% 50%';
+        currentEl.style.transform = "perspective(400px) rotate3d(".concat(y, ", ").concat(x, ", 0, 8deg) scale3d(").concat(center, ", ").concat(center, ", 1)");
+        currentEl.style.userSelect = 'none';
       }
       /* 移除元素倾斜状态 | Remove element tilt state */
 
     }, {
       key: "removeRotate",
       value: function removeRotate() {
-        var _this4 = this;
-
         if (!this.triggerEl) return;
-        this.triggerEl.style.transformOrigin = '';
-        this.triggerEl.style.transform = '';
-        setTimeout(function () {
-          _this4.triggerEl.style.transition = '';
-        }, 70);
+        this.triggerEl.forEach(function (elItem) {
+          elItem.style.transformOrigin = '';
+          elItem.style.transform = '';
+          elItem.style.userSelect = '';
+          setTimeout(function () {
+            elItem.style.transition = '';
+          }, 70);
+        });
       }
-      /* ======= eventBinder/ utils ↓ ====== */
+      /* ======= eventBinder / utils ====== */
 
     }, {
       key: "bindUpEvent",
@@ -449,8 +426,17 @@
         }
       }
     }, {
-      key: "getCrrentEl",
-      value: function getCrrentEl(e) {
+      key: "injectStyle",
+      value: function injectStyle(styleStr) {
+        var style = document.createElement('style');
+        style.setAttribute('type', 'text/css');
+        style.setAttribute('symbol', 'fr-effect');
+        style.innerHTML = styleStr;
+        document.head.appendChild(style);
+      }
+    }, {
+      key: "getCurrentEl",
+      value: function getCurrentEl(e) {
         return this.getWavesEffectElement(e);
       }
     }, {
@@ -461,7 +447,7 @@
     }, {
       key: "isDisabledWinStyle",
       value: function isDisabledWinStyle(el) {
-        return el.className.indexOf(this.option.disabledwinStyle) !== -1;
+        return el.className.indexOf(this.option.disabledWinStyle) !== -1;
       }
     }, {
       key: "isDisabledMdStyle",
@@ -498,11 +484,9 @@
       }
     }]);
 
-    return BkEffect;
+    return ClickEffect;
   }();
 
-  BkEffect.loaded = false;
+  return ClickEffect;
 
-  return BkEffect;
-
-}));
+})));

@@ -1,5 +1,5 @@
-declare module '@lxjx/bk-click-effect' {
-  export default class BkEffect {
+declare module '@lxjx/fr-click-effect' {
+  export default class ClickEffect {
     constructor(options?: {
       /** fr-effect | 需要添加点击效果的元素类名 */
       effect?: string;

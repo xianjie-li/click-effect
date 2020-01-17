@@ -1,2 +1,2 @@
-import BkEffect from './packages/BkEffect';
-export default BkEffect;
+import ClickEffect from './packages/ClickEffect';
+export default ClickEffect;
