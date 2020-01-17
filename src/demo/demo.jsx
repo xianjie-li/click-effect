@@ -7,7 +7,6 @@ new BkEffect();
 new BkEffect();
 
 import './index.css';
-import '../packages/style.css'
 
 const demo = () => {
   return (

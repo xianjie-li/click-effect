@@ -2,6 +2,7 @@
  *  md + windows 点击风格的简单实现。所有事件代理于document，支持动态创建的元素，可随意与mvvm库搭配使用。兼容手机和pc。
  *  Md + windows Click on the simple implementation of the style. All events are delegated to the document, supporting dynamically created elements, and can be used with the mvvm library at will. Compatible with mobile phones and PCs.
  */
+import { style } from './style';
 
 let loaded = false;
 
@@ -34,6 +35,7 @@ export default class BkEffect {
   init() {
     this.bindUpEvent();
     this.bindDownEvent();
+    this.injectStyle(style(this.option.effect));
   }
 
   /* mousedown */
@@ -256,6 +258,14 @@ export default class BkEffect {
     } else {
       document.removeEventListener('mousemove', this.onMove);
     }
+  }
+
+  injectStyle(styleStr) {
+    const style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
+    style.setAttribute('symbol', 'fr-effect');
+    style.innerHTML = styleStr;
+    document.head.appendChild(style);
   }
 
   getCurrentEl(e) {
