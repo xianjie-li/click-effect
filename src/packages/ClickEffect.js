@@ -207,9 +207,7 @@ export default class ClickEffect {
   }
 
   /* 设置元素倾斜状态 | Set the element tilt state */
-  setRotate(x, y, center, resSkew, currentEl) {
-    console.log(resSkew);
-    
+  setRotate(x, y, center, resSkew, currentEl) {    
     currentEl.style.transition = '70ms ease-in-out';
     currentEl.style.transformOrigin = '50% 50%';
     currentEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, ${resSkew}deg) scale3d(${center}, ${center}, 1)`;

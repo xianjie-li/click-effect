@@ -371,7 +371,6 @@
     }, {
       key: "setRotate",
       value: function setRotate(x, y, center, resSkew, currentEl) {
-        console.log(resSkew);
         currentEl.style.transition = '70ms ease-in-out';
         currentEl.style.transformOrigin = '50% 50%';
         currentEl.style.transform = "perspective(400px) rotate3d(".concat(y, ", ").concat(x, ", 0, ").concat(resSkew, "deg) scale3d(").concat(center, ", ").concat(center, ", 1)");
