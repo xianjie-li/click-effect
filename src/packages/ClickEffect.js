@@ -12,6 +12,8 @@ const defaultConfig = {
   disabledWinStyle: '__md',
   disabledMdStyle: '__win',
 };
+// 基础倾斜值
+const baseSkew = 20;
 
 export default class ClickEffect {
   supportTouch = ('ontouchstart' in window);
@@ -187,7 +189,10 @@ export default class ClickEffect {
     let x = this.calcRotateRatio(offsetX / width);
     let y = this.calcRotateRatio(offsetY / height, true);
     let center = x === 0 && y === 0 ? 0.9 : 1;
-    return [x, y, center];
+    let max = Math.max(width, height);
+    let cutSkew = Math.floor(max / 30); // 倾斜角度修正值，尺寸每增加30减少1
+    let resSkew = Math.max(4, baseSkew - cutSkew); // 最小倾斜度为4
+    return [x, y, center, resSkew];
   }
 
   /* 根据鼠标在元素上的位置来计算倾斜的反向 | Calculate the inverse of the tilt based on the position of the mouse on the element */
@@ -202,10 +207,12 @@ export default class ClickEffect {
   }
 
   /* 设置元素倾斜状态 | Set the element tilt state */
-  setRotate(x, y, center, currentEl) {
+  setRotate(x, y, center, resSkew, currentEl) {
+    console.log(resSkew);
+    
     currentEl.style.transition = '70ms ease-in-out';
     currentEl.style.transformOrigin = '50% 50%';
-    currentEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, 8deg) scale3d(${center}, ${center}, 1)`;
+    currentEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, ${resSkew}deg) scale3d(${center}, ${center}, 1)`;
     currentEl.style.userSelect = 'none';
   }
 

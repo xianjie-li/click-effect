@@ -5,9 +5,18 @@ export const style = (base) => {
       position: relative;
       overflow: hidden;
     }
-    
-    .${base}.__light .${base}-ripple{
-      background: rgba(255,255,255, 0.3);
+
+    .${base}-ripple {
+      position: absolute;
+      border-radius: 50%;
+      width: 0;
+      height: 0;
+      opacity: 1;
+      background: rgba(0,0,0,0.18);
+      transition: 0.6s ease-out;
+      transition-property: transform, opacity;
+      transform: scale3d(0, 0, 1);
+      pointer-events: none;
     }
     
     .${base}.__red .${base}-ripple{
@@ -37,18 +46,9 @@ export const style = (base) => {
     .${base}.__purple .${base}-ripple{
       background: rgba(114, 46, 209, 0.3);
     }
-    
-    .${base}-ripple {
-      position: absolute;
-      border-radius: 50%;
-      width: 0;
-      height: 0;
-      opacity: 1;
-      background: rgba(0,0,0,0.14);
-      transition: 0.6s ease-out;
-      transition-property: transform, opacity;
-      transform: scale3d(0, 0, 1);
-      pointer-events: none;
+        
+    .${base}.__light .${base}-ripple{
+      background: rgba(255,255,255, 0.3);
     }
   `
 };

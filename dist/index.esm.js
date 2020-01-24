@@ -6,19 +6,21 @@ import _createClass from '@babel/runtime/helpers/esm/createClass';
 
 var style = function style(base) {
   /* language=css */
-  return "\n    .".concat(base, " {\n      position: relative;\n      overflow: hidden;\n    }\n    \n    .").concat(base, ".__light .").concat(base, "-ripple{\n      background: rgba(255,255,255, 0.3);\n    }\n    \n    .").concat(base, ".__red .").concat(base, "-ripple{\n      background: rgba(245, 34, 45, 0.3);\n    }\n    \n    .").concat(base, ".__orange .").concat(base, "-ripple{\n      background: rgba(250, 140, 22, 0.3);\n    }\n    \n    .").concat(base, ".__yellow .").concat(base, "-ripple{\n      background: rgba(250, 219, 20, 0.3);\n    }\n    \n    .").concat(base, ".__green .").concat(base, "-ripple{\n      background: rgba(82, 196, 26, 0.3);\n    }\n    \n    .").concat(base, ".__cyan .").concat(base, "-ripple{\n      background: rgba(19, 194, 194, 0.3);\n    }\n    \n    .").concat(base, ".__blue .").concat(base, "-ripple{\n      background: rgba(24, 144, 255, 0.3);\n    }\n    \n    .").concat(base, ".__purple .").concat(base, "-ripple{\n      background: rgba(114, 46, 209, 0.3);\n    }\n    \n    .").concat(base, "-ripple {\n      position: absolute;\n      border-radius: 50%;\n      width: 0;\n      height: 0;\n      opacity: 1;\n      background: rgba(0,0,0,0.14);\n      transition: 0.6s ease-out;\n      transition-property: transform, opacity;\n      transform: scale3d(0, 0, 1);\n      pointer-events: none;\n    }\n  ");
+  return "\n    .".concat(base, " {\n      position: relative;\n      overflow: hidden;\n    }\n\n    .").concat(base, "-ripple {\n      position: absolute;\n      border-radius: 50%;\n      width: 0;\n      height: 0;\n      opacity: 1;\n      background: rgba(0,0,0,0.18);\n      transition: 0.6s ease-out;\n      transition-property: transform, opacity;\n      transform: scale3d(0, 0, 1);\n      pointer-events: none;\n    }\n    \n    .").concat(base, ".__red .").concat(base, "-ripple{\n      background: rgba(245, 34, 45, 0.3);\n    }\n    \n    .").concat(base, ".__orange .").concat(base, "-ripple{\n      background: rgba(250, 140, 22, 0.3);\n    }\n    \n    .").concat(base, ".__yellow .").concat(base, "-ripple{\n      background: rgba(250, 219, 20, 0.3);\n    }\n    \n    .").concat(base, ".__green .").concat(base, "-ripple{\n      background: rgba(82, 196, 26, 0.3);\n    }\n    \n    .").concat(base, ".__cyan .").concat(base, "-ripple{\n      background: rgba(19, 194, 194, 0.3);\n    }\n    \n    .").concat(base, ".__blue .").concat(base, "-ripple{\n      background: rgba(24, 144, 255, 0.3);\n    }\n    \n    .").concat(base, ".__purple .").concat(base, "-ripple{\n      background: rgba(114, 46, 209, 0.3);\n    }\n        \n    .").concat(base, ".__light .").concat(base, "-ripple{\n      background: rgba(255,255,255, 0.3);\n    }\n  ");
 };
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 var loaded = false;
 var defaultConfig = {
   effect: 'fr-effect',
   disabled: '__disabled',
   disabledWinStyle: '__md',
   disabledMdStyle: '__win'
-};
+}; // 基础倾斜值
+
+var baseSkew = 20;
 
 var ClickEffect =
 /*#__PURE__*/
@@ -219,7 +221,12 @@ function () {
       var x = this.calcRotateRatio(offsetX / width);
       var y = this.calcRotateRatio(offsetY / height, true);
       var center = x === 0 && y === 0 ? 0.9 : 1;
-      return [x, y, center];
+      var max = Math.max(width, height);
+      var cutSkew = Math.floor(max / 30); // 倾斜角度修正值，尺寸每增加30减少1
+
+      var resSkew = Math.max(4, baseSkew - cutSkew); // 最小倾斜度为4
+
+      return [x, y, center, resSkew];
     }
     /* 根据鼠标在元素上的位置来计算倾斜的反向 | Calculate the inverse of the tilt based on the position of the mouse on the element */
 
@@ -240,10 +247,11 @@ function () {
 
   }, {
     key: "setRotate",
-    value: function setRotate(x, y, center, currentEl) {
+    value: function setRotate(x, y, center, resSkew, currentEl) {
+      console.log(resSkew);
       currentEl.style.transition = '70ms ease-in-out';
       currentEl.style.transformOrigin = '50% 50%';
-      currentEl.style.transform = "perspective(400px) rotate3d(".concat(y, ", ").concat(x, ", 0, 8deg) scale3d(").concat(center, ", ").concat(center, ", 1)");
+      currentEl.style.transform = "perspective(400px) rotate3d(".concat(y, ", ").concat(x, ", 0, ").concat(resSkew, "deg) scale3d(").concat(center, ", ").concat(center, ", 1)");
       currentEl.style.userSelect = 'none';
     }
     /* 移除元素倾斜状态 | Remove element tilt state */

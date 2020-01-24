@@ -12,6 +12,10 @@ const demo = () => {
   return (
     <div>
       <div className="box fr-effect">base</div>
+      <div className="box fr-effect __blue __light" style={{ background: '#1890ff' }}>base</div>
+      <div className="box fr-effect __red" style={{ background: '#f5222d' }}>base</div>
+      <div className="box fr-effect __green" style={{ background: '#52c41a' }}>base</div>
+      <div className="box fr-effect __yellow" style={{ background: '#fadb14' }}>base</div>
       <div className="box fr-effect">
         has block
         <div className="block" />
