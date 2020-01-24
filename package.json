@@ -1,6 +1,6 @@
 {
   "name": "@lxjx/fr-click-effect",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "material ripple windows click effect",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
