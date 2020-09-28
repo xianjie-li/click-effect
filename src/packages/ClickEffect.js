@@ -7,7 +7,7 @@ import { style } from './style';
 let loaded = false;
 
 const defaultConfig = {
-  effect: 'fr-effect',
+  effect: 'm78-effect',
   disabled: '__disabled',
   disabledWinStyle: '__md',
   disabledMdStyle: '__win',
@@ -207,7 +207,7 @@ export default class ClickEffect {
   }
 
   /* 设置元素倾斜状态 | Set the element tilt state */
-  setRotate(x, y, center, resSkew, currentEl) {    
+  setRotate(x, y, center, resSkew, currentEl) {
     currentEl.style.transition = '70ms ease-in-out';
     currentEl.style.transformOrigin = '50% 50%';
     currentEl.style.transform = `perspective(400px) rotate3d(${y}, ${x}, 0, ${resSkew}deg) scale3d(${center}, ${center}, 1)`;
@@ -268,7 +268,7 @@ export default class ClickEffect {
   injectStyle(styleStr) {
     const style = document.createElement('style');
     style.setAttribute('type', 'text/css');
-    style.setAttribute('symbol', 'fr-effect');
+    style.setAttribute('symbol', this.option.effect);
     style.innerHTML = styleStr;
     document.head.appendChild(style);
   }
@@ -295,8 +295,7 @@ export default class ClickEffect {
 
   /**
    * Reference to: https://github.com/fians/Waves
-   * Delegated click handler for .waves-effect element.
-   * returns null when .waves-effect element not in "click tree"
+   * 从点击元素开始向上冒泡，取到第一个包含交互类名的元素，没有时返回null
    */
   getWavesEffectElement(e) {
 

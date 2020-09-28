@@ -6,15 +6,15 @@ import _createClass from '@babel/runtime/helpers/esm/createClass';
 
 var style = function style(base) {
   /* language=css */
-  return "\n    .".concat(base, " {\n      position: relative;\n      overflow: hidden;\n    }\n\n    .").concat(base, "-ripple {\n      position: absolute;\n      border-radius: 50%;\n      width: 0;\n      height: 0;\n      opacity: 1;\n      background: rgba(0,0,0,0.18);\n      transition: 0.6s ease-out;\n      transition-property: transform, opacity;\n      transform: scale3d(0, 0, 1);\n      pointer-events: none;\n    }\n    \n    .").concat(base, ".__red .").concat(base, "-ripple{\n      background: rgba(245, 34, 45, 0.3);\n    }\n    \n    .").concat(base, ".__orange .").concat(base, "-ripple{\n      background: rgba(250, 140, 22, 0.3);\n    }\n    \n    .").concat(base, ".__yellow .").concat(base, "-ripple{\n      background: rgba(250, 219, 20, 0.3);\n    }\n    \n    .").concat(base, ".__green .").concat(base, "-ripple{\n      background: rgba(82, 196, 26, 0.3);\n    }\n    \n    .").concat(base, ".__cyan .").concat(base, "-ripple{\n      background: rgba(19, 194, 194, 0.3);\n    }\n    \n    .").concat(base, ".__blue .").concat(base, "-ripple{\n      background: rgba(24, 144, 255, 0.3);\n    }\n    \n    .").concat(base, ".__purple .").concat(base, "-ripple{\n      background: rgba(114, 46, 209, 0.3);\n    }\n        \n    .").concat(base, ".__light .").concat(base, "-ripple{\n      background: rgba(255,255,255, 0.3);\n    }\n  ");
+  return "\n    .".concat(base, " {\n      position: relative;\n      overflow: hidden;\n    }\n\n    .").concat(base, "-ripple {\n      position: absolute;\n      border-radius: 50%;\n      width: 0;\n      height: 0;\n      opacity: 1;\n      background: rgba(0,0,0,0.18);\n      transition: 0.6s ease-out;\n      transition-property: transform, opacity;\n      transform: scale3d(0, 0, 1);\n      pointer-events: none;\n      z-index: 10;\n    }\n    \n    .").concat(base, ".__red .").concat(base, "-ripple{\n      background: rgba(245, 34, 45, 0.3);\n    }\n    \n    .").concat(base, ".__orange .").concat(base, "-ripple{\n      background: rgba(250, 140, 22, 0.3);\n    }\n    \n    .").concat(base, ".__yellow .").concat(base, "-ripple{\n      background: rgba(250, 219, 20, 0.3);\n    }\n    \n    .").concat(base, ".__green .").concat(base, "-ripple{\n      background: rgba(82, 196, 26, 0.3);\n    }\n    \n    .").concat(base, ".__cyan .").concat(base, "-ripple{\n      background: rgba(19, 194, 194, 0.3);\n    }\n    \n    .").concat(base, ".__blue .").concat(base, "-ripple{\n      background: rgba(24, 144, 255, 0.3);\n    }\n    \n    .").concat(base, ".__purple .").concat(base, "-ripple{\n      background: rgba(114, 46, 209, 0.3);\n    }\n        \n    .").concat(base, ".__light .").concat(base, "-ripple{\n      background: rgba(255,255,255, 0.3);\n    }\n  ");
 };
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 var loaded = false;
 var defaultConfig = {
-  effect: 'fr-effect',
+  effect: 'm78-effect',
   disabled: '__disabled',
   disabledWinStyle: '__md',
   disabledMdStyle: '__win'
@@ -318,7 +318,7 @@ function () {
     value: function injectStyle(styleStr) {
       var style = document.createElement('style');
       style.setAttribute('type', 'text/css');
-      style.setAttribute('symbol', 'fr-effect');
+      style.setAttribute('symbol', this.option.effect);
       style.innerHTML = styleStr;
       document.head.appendChild(style);
     }
@@ -349,8 +349,7 @@ function () {
     }
     /**
      * Reference to: https://github.com/fians/Waves
-     * Delegated click handler for .waves-effect element.
-     * returns null when .waves-effect element not in "click tree"
+     * 从点击元素开始向上冒泡，取到第一个包含交互类名的元素，没有时返回null
      */
 
   }, {

@@ -17,6 +17,7 @@ export const style = (base) => {
       transition-property: transform, opacity;
       transform: scale3d(0, 0, 1);
       pointer-events: none;
+      z-index: 10;
     }
     
     .${base}.__red .${base}-ripple{
